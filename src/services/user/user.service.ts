@@ -1,7 +1,7 @@
 
 
 // Entities
-import { User } from '../../entities/User';
+import { Users } from '../../entities/User';
 
 // Utilities
 // import Encryption from '../../utilities/encryption.utility';
@@ -22,8 +22,8 @@ import { IDeleteById, IDetailById } from '../../interfaces/common.interface';
 
 
 const create = async (params: ICreateUser) => {
-    const userRepository = AppDataSource.getRepository(User);
-    const item = new User();
+    const userRepository = AppDataSource.getRepository(Users);
+    const item = new Users();
     item.email = params.email;
     item.firstName = params.firstName;
     item.lastName = params.lastName;
@@ -66,7 +66,7 @@ const login = async (params: ILoginUser) => {
 
 const getById = async (id: number) => {
   try {
-    const userRepository = AppDataSource.getRepository(User);
+    const userRepository = AppDataSource.getRepository(Users);
     const data = await userRepository.findOneBy({ id: id });
     return ApiUtility.sanitizeUser(data);
   } catch (e) {

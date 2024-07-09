@@ -1,7 +1,7 @@
 import { Request } from 'express';
 
 // Entities
-import { User } from '../entities/User';
+import { Users } from '../entities/User';
 // import { BaseEntity } from '../entities/Content';
 
 // Interfaces
@@ -29,7 +29,7 @@ export default class ApiUtility {
 
   
 
-  static sanitizeUser(user: User) {
+  static sanitizeUser(user: Users) {
     const tempUser = user; 
     delete tempUser['createdDate']; 
     delete tempUser['modifiedData']; 

@@ -15,9 +15,15 @@ export class Category {
     userId: number
 
     @Column()
+    description: string
+
+    @Column()
     isActive: boolean
 
     @Column()
     createdDate: Date
+
+    @Column()
+    modifiedDate: Date
 
 }

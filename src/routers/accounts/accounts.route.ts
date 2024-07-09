@@ -1,51 +1,23 @@
-/*import express from 'express';
-// const schemaValidator = require('express-joi-validator');
-
-// Controller
-import userController from '../../controllers/user/user.controller';
-
-// Schema
-// import userSchema from '../../validations/schemas/user.schema';
-
-// Middleware
-// import { isAdmin } from '../../middlewares/permission-handler.middleware';
-
-const router = express.Router();
-
-router.get(
-  '/',
-  userController.create,
-);
-
-// router.delete(
-//   '/:id',
-//   isAdmin(),
-//   userController.remove,
-// ); */
-
-
 import express, { Request, Response }  from 'express';
-import userController from '../../controllers/user/user.controller'; 
+import accountsController from '../../controllers/accounts/accounts.controller'; 
 // import userController = 
 
 
-const userRouter = express.Router();
+const accountsRouter = express.Router();
 
 // define the home page route
-userRouter.get('/:id',  userController.findUser); 
+// userRouter.get('/:id',  categoryController.findUser); 
 
 // define the about route
-userRouter.get('/about', (req, res) => {
-  res.send('About birds')
-}); 
+accountsRouter.get('/all', accountsController.getAllAccounts);
 
-userRouter.post('/', 
-    userController.create
+accountsRouter.post('/', 
+  accountsController.create
 ); 
 
  
 
 
-export default userRouter; 
+export default accountsRouter; 
 
 // export default router;

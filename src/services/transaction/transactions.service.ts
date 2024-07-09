@@ -1,7 +1,7 @@
 
 
 // Entities
-import { User } from '../../entities/User';
+import { Transactions } from '../../entities/Transactions';
 
 // Utilities
 // import Encryption from '../../utilities/encryption.utility';
@@ -22,19 +22,20 @@ import { IDeleteById, IDetailById } from '../../interfaces/common.interface';
 
 
 const create = async (params: ICreateUser) => {
-    const userRepository = AppDataSource.getRepository(User);
-    const item = new User();
-    item.email = params.email;
-    item.firstName = params.firstName;
-    item.lastName = params.lastName;
-    item.isActive = true;
-    item.createdDate = new Date();
-    item.modifiedData = new Date();
+    const userRepository = AppDataSource.getRepository(Transactions);
+    // const item = new User();
+    // item.email = params.email;
+    // item.firstName = params.firstName;
+    // item.lastName = params.lastName;
+    // item.isActive = true;
+    // item.createdDate = new Date();
+    // item.modifiedData = new Date();
 
-    const userData = await userRepository.save(item);
-    const tempUserData = ApiUtility.sanitizeUser(userData);
-    console.log(tempUserData);
-    return tempUserData;
+    // const userData = await userRepository.save(item);
+    // const tempUserData = ApiUtility.sanitizeUser(userData);
+    // console.log(tempUserData);
+    // return tempUserData;
+    return {};
 };
 /*
 const login = async (params: ILoginUser) => {
@@ -66,7 +67,7 @@ const login = async (params: ILoginUser) => {
 
 const getById = async (id: number) => {
   try {
-    const userRepository = AppDataSource.getRepository(User);
+    const userRepository = AppDataSource.getRepository(Transactions);
     const data = await userRepository.findOneBy({ id: id });
     return ApiUtility.sanitizeUser(data);
   } catch (e) {

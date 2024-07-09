@@ -1,7 +1,7 @@
 
 
 // Entities
-import { User } from '../../entities/User';
+import { Category } from '../../entities/Category';
 
 // Utilities
 // import Encryption from '../../utilities/encryption.utility';
@@ -10,32 +10,64 @@ import ApiUtility from '../../utilities/api-utility';
 import { AppDataSource } from '../../../data-source';
 // Interfaces
 import {
-    ICreateUser,
-    ILoginUser,
-    IUpdateUser,
-    IUserQueryParams,
-} from '../../interfaces/user.interface';
+    ICreateCategory
+} from '../../interfaces/category.interface';
 import { IDeleteById, IDetailById } from '../../interfaces/common.interface';
 
 // Errors
 // import { StringError } from '../../errors/string.error';
 
 
-const create = async (params: ICreateUser) => {
-    const userRepository = AppDataSource.getRepository(User);
-    const item = new User();
-    item.email = params.email;
-    item.firstName = params.firstName;
-    item.lastName = params.lastName;
+
+
+
+const create = async (params: ICreateCategory) => {
+  try {
+    const catergoryRepository = AppDataSource.getRepository(Category);
+    const item = new Category();
+    item.categoryName = params.categoryName;
+    item.categoryType = params.categoryType;
+    item.description = params.description;
     item.isActive = true;
     item.createdDate = new Date();
-    item.modifiedData = new Date();
+    item.modifiedDate = new Date();
 
-    const userData = await userRepository.save(item);
-    const tempUserData = ApiUtility.sanitizeUser(userData);
-    console.log(tempUserData);
-    return tempUserData;
-};
+    const userData = await catergoryRepository.save(item);
+  
+    return userData;
+  } catch(e) {
+    return null;
+  }
+}
+
+
+const getAllCategories = async () => {
+  try {
+    const catergoryRepository = AppDataSource.getRepository(Category);
+    
+
+    const userData = await catergoryRepository.find({
+      select: {
+        categoryName: true,
+        categoryType: true,
+        isActive: true,
+      }
+    });
+  
+    return userData;
+  } catch(e) {
+    return null;
+  }
+}
+
+ 
+export default {
+    create, 
+    getAllCategories
+}
+
+
+   
 /*
 const login = async (params: ILoginUser) => {
   const user = await getRepository(User)
@@ -64,15 +96,7 @@ const login = async (params: ILoginUser) => {
   throw new StringError('Your password is not correct');
 }; */
 
-const getById = async (id: number) => {
-  try {
-    const userRepository = AppDataSource.getRepository(User);
-    const data = await userRepository.findOneBy({ id: id });
-    return ApiUtility.sanitizeUser(data);
-  } catch (e) {
-    return null;
-  }
-};
+
 
 /*
 
@@ -146,7 +170,3 @@ const remove = async (params: IDeleteById) => {
   });
 }
 */
-export default {
-    create,
-    getById
-}

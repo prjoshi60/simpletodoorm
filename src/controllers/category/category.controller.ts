@@ -4,23 +4,22 @@ import httpStatusCodes from 'http-status-codes';
 // Interfaces
 import IController from '../../interfaces/IController';
 import {
-  ICreateUser,
-  ILoginUser,
-  IUpdateUser,
-  IUserQueryParams,
-} from '../../interfaces/user.interface';
+  ICreateCategory,
+} from '../../interfaces/category.interface';
 import { IDeleteById, IDetailById } from '../../interfaces/common.interface';
 
 // Errors
 // import { StringError } from '../../errors/string.error';
 
 // Services
-import userService from '../../services/user/user.service';
+import categoryService from '../../services/category/category.service';
 
 // Utilities
 import ApiResponse from '../../utilities/api-response.utitlity';
+import { getCategoryType } from '../../utilities/app-utility';
 // import Encryption from '../../utilities/encryption.utility';
 // import ApiUtility from '../../utilities/api.utility';
+import { getLoggedInUserId } from '../../utilities/auth-utility';
 
 // Constants
 // import constants from '../../constants';
@@ -28,16 +27,20 @@ import ApiResponse from '../../utilities/api-response.utitlity';
 const create: IController = async (req, res) => {
   try {
     
-    const params: ICreateUser = {
-      email: req.body.email,
-      password: req.body.password,
-      firstName: req.body.firstName,
-      lastName: req.body.lastName,
+    const params: ICreateCategory = {
+      categoryName: req.body.categoryName,
+      userId: getLoggedInUserId(),
+      isActive: true,
+      categoryType: getCategoryType(req.body.categoryType), 
+      description: req.body.description, 
+      createdDate: new Date(), 
+      modifiedDate: new Date()
+      
     }
     
-    const user = await userService.create(params);
+    const category = await categoryService.create(params);
     
-    return ApiResponse.result(res, params, httpStatusCodes.CREATED);
+    return ApiResponse.result(res, category, httpStatusCodes.CREATED);
   } catch (e) {
     // if (e.code === constants.ERROR_CODE.DUPLICATED) {
     //   return ApiResponse.error(res, httpStatusCodes.CONFLICT, 'Email already exists.');
@@ -46,16 +49,15 @@ const create: IController = async (req, res) => {
     //}
 }; 
 
-const findUser: IController = async (req, res) => {
+const getAllCategories: IController = async (req, res) => {
     try {
-      console.log(" Params :: ", req.params);
-      const id = parseInt(req.params.id);
-      const user = await userService.getById(id);
+      
+      const categories = await categoryService.getAllCategories();
 
-      if (user) {
-        return ApiResponse.result(res, user, httpStatusCodes.OK);
+      if (categories) {
+        return ApiResponse.result(res, categories, httpStatusCodes.OK);
       } else {
-        const data =  'User not found';
+        const data =  'Categories not found';
         return ApiResponse.result(res, data, httpStatusCodes.OK);
       }
       
@@ -66,6 +68,16 @@ const findUser: IController = async (req, res) => {
       // return ApiResponse.error(res, httpStatusCodes.BAD_REQUEST);
       //}
   }; 
+
+
+
+export default {
+  create, 
+  getAllCategories
+
+
+};
+
 
 /*
 
@@ -162,9 +174,3 @@ const generateUserCookie = async (userId: number) => {
     value: await Encryption.generateCookie(constants.COOKIE.KEY_USER_ID, userId.toString()),
   };
 }; */
-
-export default {
-  create,
-  findUser
-
-};

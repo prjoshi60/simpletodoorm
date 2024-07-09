@@ -25,7 +25,7 @@ router.get(
 
 
 import express, { Request, Response }  from 'express';
-import transactionsController from '../../controllers/transactions/transaction.controller'; 
+import transactionsController from '../../controllers/transactions/transactions.controller'; 
 // import userController = 
 
 

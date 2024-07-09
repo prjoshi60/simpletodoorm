@@ -25,7 +25,7 @@ router.get(
 
 
 import express, { Request, Response }  from 'express';
-import userController from '../../controllers/user/user.controller'; 
+import userController from '../../controllers/user/users.controller'; 
 // import userController = 
 
 

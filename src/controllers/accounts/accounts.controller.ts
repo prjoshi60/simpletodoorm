@@ -4,10 +4,7 @@ import httpStatusCodes from 'http-status-codes';
 // Interfaces
 import IController from '../../interfaces/IController';
 import {
-  ICreateUser,
-  ILoginUser,
-  IUpdateUser,
-  IUserQueryParams,
+  ICreateAccount,
 } from '../../interfaces/user.interface';
 import { IDeleteById, IDetailById } from '../../interfaces/common.interface';
 
