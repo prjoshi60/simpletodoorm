@@ -1,9 +1,15 @@
-// Interfaces
-import { IBaseQueryParams } from './common.interface';
 
-export interface ITransaction {
-  email: string;
-  password: string;
-  firstName: string;
-  lastName: string;
-}
+
+export interface ISaveTransaction {
+  userId: number;
+  accountId: number;
+  categoryId: number;
+  type: number;
+  amount: number;
+  accountBalance: number;
+  description: string;
+  isActive: boolean;
+  createdDate: Date;
+  modifiedDate: Date;
+  transactionDate: Date;
+};

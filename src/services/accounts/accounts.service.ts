@@ -5,37 +5,52 @@ import { Accounts } from '../../entities/Accounts';
 
 // Utilities
 // import Encryption from '../../utilities/encryption.utility';
-import ApiUtility from '../../utilities/api-utility';
+// import ApiUtility from '../../utilities/api-utility';
 // import DateTimeUtility from '../../utilities/date-time.utility';
 import { AppDataSource } from '../../../data-source';
-// Interfaces
-import {
-    ICreateUser,
-    ILoginUser,
-    IUpdateUser,
-    IUserQueryParams,
-} from '../../interfaces/user.interface';
-import { IDeleteById, IDetailById } from '../../interfaces/common.interface';
+
+
+import { ICreateAccount } from 'interfaces/accounts.interface';
 
 // Errors
 // import { StringError } from '../../errors/string.error';
 
 
-const create = async (params: ICreateUser) => {
+const create = async (params: ICreateAccount) => {
+  try {
     const accountRepository = AppDataSource.getRepository(Accounts);
     const item = new Accounts();
-    // item.email = params.email;
-    // item.firstName = params.firstName;
-    // item.lastName = params.lastName;
-    // item.isActive = true;
-    // item.createdDate = new Date();
-    // item.modifiedData = new Date();
 
-    // const userData = await userRepository.save(item);
+    item.accountName = params.accountName;
+    item.type = 0;
+    item.userId = params.userId;
+    item.accountBalance = params.accountBalance;
+    item.description = params.description;
+    item.isActive = true;
+    item.createdDate = params.createdDate;
+    item.modifiedDate  = params.modifiedDate;
+    
+
+    const tempUserData = await accountRepository.save(item);
     // const tempUserData = ApiUtility.sanitizeUser(userData);
     // console.log(tempUserData);
-    // return tempUserData;
-    return {};
+    return tempUserData;
+
+  } catch(e) {
+    return null;
+  }
+  
+  
+};
+
+const getAllAccounts = async (userId: number) => {
+  try {
+    const userRepository = AppDataSource.getRepository(Accounts);
+    const data = await userRepository.findBy({ userId: userId });
+    return data;
+  } catch (e) {
+    return null;
+  }
 };
 /*
 const login = async (params: ILoginUser) => {
@@ -65,15 +80,15 @@ const login = async (params: ILoginUser) => {
   throw new StringError('Your password is not correct');
 }; */
 
-const getById = async (id: number) => {
-  try {
-    const userRepository = AppDataSource.getRepository(User);
-    const data = await userRepository.findOneBy({ id: id });
-    return ApiUtility.sanitizeUser(data);
-  } catch (e) {
-    return null;
-  }
-};
+// const getById = async (id: number) => {
+//   try {
+//     const userRepository = AppDataSource.getRepository(User);
+//     const data = await userRepository.findOneBy({ id: id });
+//     return ApiUtility.sanitizeUser(data);
+//   } catch (e) {
+//     return null;
+//   }
+// };
 
 /*
 
@@ -148,6 +163,6 @@ const remove = async (params: IDeleteById) => {
 }
 */
 export default {
-    create,
-    getById
+  create,
+  getAllAccounts
 }

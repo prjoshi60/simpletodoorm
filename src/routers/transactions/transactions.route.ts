@@ -24,7 +24,7 @@ router.get(
 // ); */
 
 
-import express, { Request, Response }  from 'express';
+import express  from 'express';
 import transactionsController from '../../controllers/transactions/transactions.controller'; 
 // import userController = 
 
@@ -32,20 +32,15 @@ import transactionsController from '../../controllers/transactions/transactions.
 const transactionRouter = express.Router();
 
 // define the home page route
-transactionRouter.get('/:id',  userController.findUser); 
-
-// define the about route
-transactionRouter.get('/about', (req, res) => {
-  res.send('About birds')
-}); 
+transactionRouter.get('/:id',  transactionsController.findUser);  
 
 transactionRouter.post('/', 
-    userController.create
+  transactionsController.create
 ); 
 
  
 
 
-export default userRouter; 
+export default transactionRouter; 
 
 // export default router;

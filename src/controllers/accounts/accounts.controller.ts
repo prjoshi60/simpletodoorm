@@ -5,17 +5,17 @@ import httpStatusCodes from 'http-status-codes';
 import IController from '../../interfaces/IController';
 import {
   ICreateAccount,
-} from '../../interfaces/user.interface';
-import { IDeleteById, IDetailById } from '../../interfaces/common.interface';
+} from '../../interfaces/accounts.interface';
 
 // Errors
 // import { StringError } from '../../errors/string.error';
 
 // Services
-import userService from '../../services/user/user.service';
+import accountService from '../../services/accounts/accounts.service';
 
 // Utilities
 import ApiResponse from '../../utilities/api-response.utitlity';
+import { getLoggedInUserId } from '../../utilities/auth-utility';
 // import Encryption from '../../utilities/encryption.utility';
 // import ApiUtility from '../../utilities/api.utility';
 
@@ -24,47 +24,67 @@ import ApiResponse from '../../utilities/api-response.utitlity';
 
 const create: IController = async (req, res) => {
   try {
-    
-    const params: ICreateUser = {
-      email: req.body.email,
-      password: req.body.password,
-      firstName: req.body.firstName,
-      lastName: req.body.lastName,
+
+    const params: ICreateAccount = {
+      accountName: req.body.accountName,
+      type: 0, // For now saving 0
+      userId: getLoggedInUserId(),
+      accountBalance: parseInt(req.body.accountBalance),
+      description: req.body.description,
+      isActive: true,
+      createdDate: new Date(),
+      modifiedDate: new Date()
+
     }
-    
-    const user = await userService.create(params);
-    
-    return ApiResponse.result(res, params, httpStatusCodes.CREATED);
+
+    const accounts = await accountService.create(params);
+
+    return ApiResponse.result(res, accounts, httpStatusCodes.CREATED);
   } catch (e) {
     // if (e.code === constants.ERROR_CODE.DUPLICATED) {
     //   return ApiResponse.error(res, httpStatusCodes.CONFLICT, 'Email already exists.');
-    }
-    // return ApiResponse.error(res, httpStatusCodes.BAD_REQUEST);
-    //}
-}; 
+  }
+  // return ApiResponse.error(res, httpStatusCodes.BAD_REQUEST);
+  //}
+};
 
-const findUser: IController = async (req, res) => {
-    try {
-      console.log(" Params :: ", req.params);
-      const id = parseInt(req.params.id);
-      const user = await userService.getById(id);
+const getAllAccounts: IController = async (req, res) => {
+  try {
+    const userId = parseInt(req.params.userId);
+    const accounts = await accountService.getAllAccounts(userId);
 
-      if (user) {
-        return ApiResponse.result(res, user, httpStatusCodes.OK);
-      } else {
-        const data =  'User not found';
-        return ApiResponse.result(res, data, httpStatusCodes.OK);
-      }
-      
-    } catch (e) {
-      // if (e.code === constants.ERROR_CODE.DUPLICATED) {
-      //   return ApiResponse.error(res, httpStatusCodes.CONFLICT, 'Email already exists.');
-      }
-      // return ApiResponse.error(res, httpStatusCodes.BAD_REQUEST);
-      //}
-  }; 
-
+    return ApiResponse.result(res, accounts, httpStatusCodes.CREATED);
+  } catch (e) {
+    // if (e.code
+    //  === constants.ERROR_CODE.DUPLICATED) {
+    //   return ApiResponse.error(res, httpStatusCodes.CONFLICT, 'Email already exists.');
+  }
+  // return ApiResponse.error(res, httpStatusCodes.BAD_REQUEST);
+  //}
+};
 /*
+const findUser: IController = async (req, res) => {
+  try {
+    console.log(" Params :: ", req.params);
+    const id = parseInt(req.params.id);
+    const user = await userService.getById(id);
+
+    if (user) {
+      return ApiResponse.result(res, user, httpStatusCodes.OK);
+    } else {
+      const data = 'User not found';
+      return ApiResponse.result(res, data, httpStatusCodes.OK);
+    }
+
+  } catch (e) {
+    // if (e.code === constants.ERROR_CODE.DUPLICATED) {
+    //   return ApiResponse.error(res, httpStatusCodes.CONFLICT, 'Email already exists.');
+  }
+  // return ApiResponse.error(res, httpStatusCodes.BAD_REQUEST);
+  //}
+};
+
+
 
 const login: IController = async (req, res) => {
   try {
@@ -162,6 +182,6 @@ const generateUserCookie = async (userId: number) => {
 
 export default {
   create,
-  findUser
+  getAllAccounts
 
 };
